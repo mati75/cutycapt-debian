@@ -1,0 +1,5 @@
+cutycapt (0.0~svn6-1) unstable; urgency=low
+
+  * Initial release (Closes: #587446)
+
+ -- David Paleino <dapal@debian.org>  Mon, 28 Jun 2010 21:22:28 +0200

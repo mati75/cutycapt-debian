@@ -1,0 +1,105 @@
+.TH CUTYCAPT 1 "June 28, 2010"
+.SH NAME
+cutycapt \- utility to capture WebKit's rendering of a web page
+.SH SYNOPSIS
+.B cutycapt
+.RI [ options ]
+\fB\-\-url=\fIhttp://www.someurl.com\fR \fB\-\-out=\fIoutput.png\fR
+.SH DESCRIPTION
+This manual page documents briefly the \fBcutycapt\fR command.
+.PP
+\fBCutyCapt\fR is a small cross-platform command-line utility to capture WebKit's
+rendering of a web page into a variety of vector and bitmap formats, including
+SVG, PDF, PS, PNG, JPEG, TIFF, GIF, and BMP.
+.SH OPTIONS
+A summary of options is included below.
+.TP
+.B \-\-help
+Show summary of options.
+.TP
+\fB\-\-url=\fI<url>\fR
+The URL to capture (http:...|file:...|...)
+.TP
+\fB\-\-out=\fI<path>\fR
+The target file (.png|pdf|ps|svg|jpeg|...)
+.TP
+\fB\-\-out-format=\fI<f>\fR
+Like extension in \fB\-\-out, overrides heuristic 
+.TP
+\fB\-\-min-width=\fI<int>\fR
+Minimal width for the image (default: 800)
+.TP
+\fB\-\-min-height=\fI<int>\fR
+Minimal height for the image (default: 600)
+.TP
+\fB\-\-max-wait=\fI<ms>\fR
+Don't wait more than (default: 90000, infinite: 0)
+.TP
+\fB\-\-delay=\fI<ms>\fR
+After successful load, wait (default: 0)
+.TP
+\fB\-\-user-style-path=\fI<path>\fR
+Location of user style sheet file, if any
+.TP
+\fB\-\-user-style-string=\fI<css>\fR
+User style rules specified as text
+.TP
+\fB\-\-header=\fI<name>\fB:\fI<value>\fR
+Request header; repeatable; some can't be set
+.TP
+\fB\-\-method=\fI<get|post|put>\fR
+Specifies the request method (default: get)
+.TP
+\fB\-\-body-string=\fI<string>\fR
+Unencoded request body (default: none) 
+.TP
+\fB\-\-body-base64=\fI<base64>\fR
+Base64-encoded request body (default: none)
+.TP
+\fB\-\-app-name=\fI<name>\fR
+Application name used in User-Agent; default is none
+.TP
+\fB\-\-app-version=\fI<version>\fR
+Application version used in User-Agent; default is none
+.TP
+\fB\-\-user-agent=\fI<string>\fR
+Override the User-Agent header Qt would set
+.TP
+\fB\-\-javascript=\fI<on|off>\fR
+JavaScript execution (default: on) 
+.TP
+\fB\-\-java=\fI<on|off>\fR
+Java execution (default: unknown)
+.TP
+\fB\-\-plugins=\fI<on|off>\fR
+Plugin execution (default: unknown)
+.TP
+\fB\-\-private-browsing=\fI<on|off>\fR
+Private browsing (default: unknown)
+.TP
+\fB\-\-auto-load-images=\fI<on|off>\fR
+Automatic image loading (default: on)
+.TP
+\fB\-\-js-can-open-windows=\fI<on|off>\fR
+Script can open windows? (default: unknown)
+.TP
+\fB\-\-js-can-access-clipboard=\fI<on|off>\fR
+Script clipboard privs (default: unknown)
+.TP
+\fB\-\-print-backgrounds=\fI<on|off>\fR
+Backgrounds in PDF/PS output (default: off)
+.TP
+\fB\-\-zoom-factor=\fI<float>\fR
+Page zoom factor (default: no zooming) 
+.TP
+\fB\-\-zoom-text-only=\fI<on|off>\fR
+Whether to zoom only the text (default: off) 
+.TP
+\fB\-\-http-proxy=\fI<url>\fR
+Address for HTTP proxy server (default: none)
+.SH AUTHOR
+CutyCapt was written by Björn Höhrmann <bjoern@hoehrmann.de>.
+.PP
+This manual page was written by David Paleino <dapal@debian.org>,
+for the Debian project (and may be used by others), and is licensed
+under the GNU General Public License, version 2 or later.

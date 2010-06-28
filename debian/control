@@ -1,0 +1,23 @@
+Source: cutycapt
+Section: web
+Priority: optional
+Maintainer: David Paleino <dapal@debian.org>
+Build-Depends:
+ debhelper (>= 7.4.12~)
+ , libqt4-dev (>= 4.4.0)
+ , qt4-qmake
+Standards-Version: 3.9.0
+Homepage: http://cutycapt.sourceforge.net/
+Vcs-Git: git://git.debian.org/collab-maint/cutycapt.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/cutycapt.git;a=summary
+
+Package: cutycapt
+Architecture: any
+Depends:
+ ${shlibs:Depends}
+ , ${misc:Depends}
+Suggests: xvfb
+Description: utility to capture WebKit's rendering of a web page
+ CutyCapt is a small cross-platform command-line utility to capture WebKit's
+ rendering of a web page into a variety of vector and bitmap formats, including
+ SVG, PDF, PS, PNG, JPEG, TIFF, GIF, and BMP.

@@ -1,0 +1,12 @@
+cutycapt for Debian
+-------------------
+
+There is no released tarball for this package. It is a SVN snapshot taken from
+SourceForge.
+To get the tarball used for this package, use:
+
+  $ debian/rules get-orig-source
+
+
+
+

@@ -1,0 +1,12 @@
+cutycapt for Debian
+-------------------
+
+ Using CutyCapt without X server
+ 
+ You cannot use CutyCapt without an X server, but you can use e.g. Xvfb as a
+ light-weight server if you are not running an interactive graphical desktop
+ environment. For example, you could use:
+
+  $ xvfb-run --server-args="-screen 0, 1024x768x24" cutycapt --url=... --out=...
+
+ -- David Paleino <dapal@debian.org>  Mon, 28 Jun 2010 19:21:02 +0200

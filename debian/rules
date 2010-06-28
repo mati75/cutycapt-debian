@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+CURVER=$(shell dpkg-parsechangelog | grep ^Version | cut -d\  -f2 | cut -d- -f1)
+SVNREV=$(shell echo $(CURVER) | awk -F'svn' '{print $$2}' )
+
+%:
+	dh $@ 
+
+override_dh_auto_install:
+	install -m755 CutyCapt $(CURDIR)/debian/cutycapt/usr/bin/cutycapt
+
+get-orig-source:
+	svn checkout -r $(SVNREV) https://cutycapt.svn.sourceforge.net/svnroot/cutycapt/CutyCapt cutycapt
+	find cutycapt -name ".svn" | xargs -r rm -rf
+	tar cf cutycapt_$(CURVER).orig.tar cutycapt/
+	gzip -9 cutycapt_$(CURVER).orig.tar
+	rm -rf cutycapt/
