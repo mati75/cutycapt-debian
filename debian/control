@@ -6,7 +6,7 @@ Build-Depends:
  debhelper (>= 7.4.12~)
  , libqt4-dev (>= 4.4.0)
  , qt4-qmake
-Standards-Version: 3.9.0
+Standards-Version: 3.9.1
 Homepage: http://cutycapt.sourceforge.net/
 Vcs-Git: git://git.debian.org/collab-maint/cutycapt.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/cutycapt.git;a=summary
