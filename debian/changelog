@@ -1,3 +1,10 @@
+cutycapt (0.0~svn6-2) UNRELEASED; urgency=low
+
+  * Assume http if no scheme is given on the command line
+    (01-assume_http_as_default.patch) (Closes: #611900)
+
+ -- David Paleino <dapal@debian.org>  Tue, 01 Mar 2011 12:54:38 +0100
+
 cutycapt (0.0~svn6-1) unstable; urgency=low
 
   * Initial release (Closes: #587446)
