@@ -1,3 +1,9 @@
+cutycapt (0.0~svn6-3) UNRELEASED; urgency=low
+
+  * Add Build-Depends on libqtwebkit-dev (Closes: #618240)
+
+ -- David Paleino <dapal@debian.org>  Sun, 13 Mar 2011 19:07:41 +0100
+
 cutycapt (0.0~svn6-2) unstable; urgency=low
 
   * Assume http if no scheme is given on the command line

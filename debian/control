@@ -5,6 +5,7 @@ Maintainer: David Paleino <dapal@debian.org>
 Build-Depends:
  debhelper (>= 7.4.12~)
  , libqt4-dev (>= 4.4.0)
+ , libqtwebkit-dev
  , qt4-qmake
 Standards-Version: 3.9.1
 Homepage: http://cutycapt.sourceforge.net/
