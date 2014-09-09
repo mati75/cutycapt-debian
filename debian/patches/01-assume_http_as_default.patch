@@ -7,9 +7,9 @@ Forwarded: no
  CutyCapt.cpp |   16 ++++++++++++----
  1 file changed, 12 insertions(+), 4 deletions(-)
 
---- cutycapt.orig/CutyCapt.cpp
-+++ cutycapt/CutyCapt.cpp
-@@ -362,7 +362,7 @@ main(int argc, char *argv[]) {
+--- a/CutyCapt.cpp
++++ b/CutyCapt.cpp
+@@ -363,7 +363,7 @@
    int argMaxWait = 90000;
    int argVerbosity = 0;
    
@@ -18,7 +18,7 @@ Forwarded: no
    const char* argUserStyle = NULL;
    const char* argUserStylePath = NULL;
    const char* argUserStyleString = NULL;
-@@ -370,6 +370,7 @@ main(int argc, char *argv[]) {
+@@ -371,6 +371,7 @@
    const char* argInjectScript = NULL;
    const char* argScriptObject = NULL;
    QString argOut;
@@ -26,7 +26,7 @@ Forwarded: no
  
    CutyCapt::OutputFormat format = CutyCapt::OtherFormat;
  
-@@ -421,7 +422,7 @@ main(int argc, char *argv[]) {
+@@ -422,7 +423,7 @@
  
      // --name=value options
      if (strncmp("--url", s, nlen) == 0) {
@@ -35,7 +35,7 @@ Forwarded: no
  
      } else if (strncmp("--min-width", s, nlen) == 0) {
        // TODO: add error checking here?
-@@ -571,14 +572,21 @@ main(int argc, char *argv[]) {
+@@ -572,14 +573,21 @@
      }
    }
  

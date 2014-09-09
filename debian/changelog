@@ -1,3 +1,11 @@
+cutycapt (0.0~svn6-3.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Add patch to fix FTBFS. (Closes: #601808)
+  * Refresh 01-assume_http_as_default.patch.
+
+ -- Julián Moreno Patiño <julian@debian.org>  Tue, 09 Sep 2014 15:07:53 -0500
+
 cutycapt (0.0~svn6-3) unstable; urgency=low
 
   * Add Build-Depends on libqtwebkit-dev (Closes: #618240)
