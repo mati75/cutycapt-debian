@@ -1,14 +1,47 @@
 Description: Add missing #include to fix FTBFS.
 Forwarded: no
 Author: Julián Moreno Patiño <julian@debian.org>
-Last-Update: 2014-09-09
+Last-Update: 2016-08-05
+
 --- a/CutyCapt.cpp
 +++ b/CutyCapt.cpp
-@@ -25,6 +25,7 @@
+@@ -27,15 +27,13 @@
+ #include <QtWebKit>
+ #include <QtGui>
+ #include <QSvgGenerator>
+-
+-#if QT_VERSION < 0x050000
  #include <QPrinter>
+-#endif
+-
  #include <QTimer>
  #include <QByteArray>
 +#include <QNetworkProxyFactory>
  #include <QNetworkRequest>
+ #include <QNetworkProxy>
++#include <QSslError>
  #include "CutyCapt.hpp"
  
+ #if QT_VERSION >= 0x040600 && 0
+
+--- a/CutyCapt.pro
++++ b/CutyCapt.pro
+@@ -4,7 +4,7 @@ HEADERS   =  CutyCapt.hpp
+ CONFIG   +=  qt console
+ 
+ greaterThan(QT_MAJOR_VERSION, 4): {
+-  QT       +=  webkitwidgets
++  QT       +=  webkitwidgets printsupport
+ }
+ 
+ contains(CONFIG, static): {
+
+--- a/CutyCapt.hpp
++++ b/CutyCapt.hpp
+@@ -1,4 +1,6 @@
+ #include <QtWebKit>
++#include <QNetworkReply>
++#include <QSslError>
+ 
+ #if QT_VERSION >= 0x050000
+ #include <QtWebKitWidgets>

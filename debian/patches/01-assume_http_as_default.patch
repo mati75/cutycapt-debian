@@ -3,22 +3,18 @@ Subject: if no scheme is present, assume http
 Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=611900
 Forwarded: no
 
----
- CutyCapt.cpp |   16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
 --- a/CutyCapt.cpp
 +++ b/CutyCapt.cpp
-@@ -363,7 +363,7 @@
-   int argMaxWait = 90000;
+@@ -409,7 +409,7 @@ main(int argc, char *argv[]) {
    int argVerbosity = 0;
-   
+   int argSmooth = 0;
+ 
 -  const char* argUrl = NULL;
 +  QByteArray argUrl = NULL;
    const char* argUserStyle = NULL;
    const char* argUserStylePath = NULL;
    const char* argUserStyleString = NULL;
-@@ -371,6 +371,7 @@
+@@ -417,6 +417,7 @@ main(int argc, char *argv[]) {
    const char* argInjectScript = NULL;
    const char* argScriptObject = NULL;
    QString argOut;
@@ -26,7 +22,7 @@ Forwarded: no
  
    CutyCapt::OutputFormat format = CutyCapt::OtherFormat;
  
-@@ -422,7 +423,7 @@
+@@ -478,7 +479,7 @@ main(int argc, char *argv[]) {
  
      // --name=value options
      if (strncmp("--url", s, nlen) == 0) {
@@ -35,7 +31,7 @@ Forwarded: no
  
      } else if (strncmp("--min-width", s, nlen) == 0) {
        // TODO: add error checking here?
-@@ -572,14 +573,21 @@
+@@ -628,14 +629,21 @@ main(int argc, char *argv[]) {
      }
    }
  

@@ -1,3 +1,21 @@
+cutycapt (0.0~svn10-0.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Merged lastest upstream svn version. (Closes: #652969, #784459)
+  * debian/control:
+    - Bump debhelper version to 9.
+    - Change B-D to qt5.
+    - Bump Standards-Version to 3.9.8.
+    - Use secured links for VCS.
+  * debian/compat: Bump to 9.
+  * debian/rules:
+    - Set QT_SELECT to 5.
+    - Add perl oneliner to convert files to unix format.
+    - Enable hardening.
+  * debian/patches: Refresh exists.
+
+ -- Mateusz Łukasik <mati75@linuxmint.pl>  Fri, 05 Aug 2016 20:36:58 +0200
+
 cutycapt (0.0~svn6-3.1) unstable; urgency=medium
 
   * Non-maintainer upload.

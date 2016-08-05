@@ -2,21 +2,16 @@ Source: cutycapt
 Section: web
 Priority: optional
 Maintainer: David Paleino <dapal@debian.org>
-Build-Depends:
- debhelper (>= 7.4.12~)
- , libqt4-dev (>= 4.4.0)
- , libqtwebkit-dev
- , qt4-qmake
-Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 9), qtbase5-dev, libqt5webkit5-dev, qt5-qmake,
+ libqt5svg5-dev
+Standards-Version: 3.9.8
 Homepage: http://cutycapt.sourceforge.net/
-Vcs-Git: git://git.debian.org/collab-maint/cutycapt.git
-Vcs-Browser: http://git.debian.org/?p=collab-maint/cutycapt.git;a=summary
+Vcs-Git: https://anonscm.debian.org/git/collab-maint/cutycapt.git
+Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/cutycapt.git
 
 Package: cutycapt
 Architecture: any
-Depends:
- ${shlibs:Depends}
- , ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: xvfb
 Description: utility to capture WebKit's rendering of a web page
  CutyCapt is a small cross-platform command-line utility to capture WebKit's
