@@ -2,19 +2,24 @@
 //
 // CutyCapt - A Qt WebKit Web Page Rendering Capture Utility
 //
-// Copyright (C) 2003-2010 Bjoern Hoehrmann <bjoern@hoehrmann.de>
+// Copyright (C) 2003-2013 Bjoern Hoehrmann <bjoern@hoehrmann.de>
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
 // of the License, or (at your option) any later version.
 //
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// $Id$
+// $Id: CutyCapt.cpp 10 2013-07-14 21:57:37Z hoehrmann $
 //
 ////////////////////////////////////////////////////////////////////
 
@@ -22,10 +27,15 @@
 #include <QtWebKit>
 #include <QtGui>
 #include <QSvgGenerator>
+
+#if QT_VERSION < 0x050000
 #include <QPrinter>
+#endif
+
 #include <QTimer>
 #include <QByteArray>
 #include <QNetworkRequest>
+#include <QNetworkProxy>
 #include "CutyCapt.hpp"
 
 #if QT_VERSION >= 0x040600 && 0
@@ -51,7 +61,9 @@ static struct _CutyExtMap {
   { CutyCapt::PsFormat,          ".ps",         "ps"    },
   { CutyCapt::InnerTextFormat,   ".txt",        "itext" },
   { CutyCapt::HtmlFormat,        ".html",       "html"  },
+#if QT_VERSION < 0x050000
   { CutyCapt::RenderTreeFormat,  ".rtree",      "rtree" },
+#endif
   { CutyCapt::JpegFormat,        ".jpeg",       "jpeg"  },
   { CutyCapt::PngFormat,         ".png",        "png"   },
   { CutyCapt::MngFormat,         ".mng",        "mng"   },
@@ -149,10 +161,13 @@ CutyPage::setAttribute(QWebSettings::WebAttribute option,
 // TODO: Consider merging some of main() and CutyCap
 
 CutyCapt::CutyCapt(CutyPage* page, const QString& output, int delay, OutputFormat format,
-                   const QString& scriptProp, const QString& scriptCode) {
+                   const QString& scriptProp, const QString& scriptCode, bool insecure,
+                   bool smooth) {
   mPage = page;
   mOutput = output;
   mDelay = delay;
+  mInsecure = insecure;
+  mSmooth = smooth;
   mSawInitialLayout = false;
   mSawDocumentComplete = false;
   mFormat = format;
@@ -226,6 +241,15 @@ CutyCapt::Delayed() {
 }
 
 void
+CutyCapt::handleSslErrors(QNetworkReply* reply, QList<QSslError> errors) {
+  if (mInsecure) {
+    reply->ignoreSslErrors();
+  } else {
+    // TODO: what to do here instead of hanging?
+  }
+}
+
+void
 CutyCapt::saveSnapshot() {
   QWebFrame *mainFrame = mPage->mainFrame();
   QPainter painter;
@@ -265,15 +289,23 @@ CutyCapt::saveSnapshot() {
       mainFrame->print(&printer);
       break;
     }
-    case RenderTreeFormat:
+#if QT_VERSION < 0x050000
+    case RenderTreeFormat: {
+      QFile file(mOutput);
+      file.open(QIODevice::WriteOnly | QIODevice::Text);
+      QTextStream s(&file);
+      s.setCodec("utf-8");
+      s << mainFrame->renderTreeDump();
+      break;
+    }
+#endif
     case InnerTextFormat:
     case HtmlFormat: {
       QFile file(mOutput);
       file.open(QIODevice::WriteOnly | QIODevice::Text);
       QTextStream s(&file);
       s.setCodec("utf-8");
-      s << (mFormat == RenderTreeFormat ? mainFrame->renderTreeDump() :
-            mFormat == InnerTextFormat  ? mainFrame->toPlainText() :
+      s << (mFormat == InnerTextFormat  ? mainFrame->toPlainText() :
             mFormat == HtmlFormat       ? mainFrame->toHtml() :
             "bug");
       break;
@@ -281,6 +313,14 @@ CutyCapt::saveSnapshot() {
     default: {
       QImage image(mPage->viewportSize(), QImage::Format_ARGB32);
       painter.begin(&image);
+#if QT_VERSION >= 0x050000
+      if (mSmooth) {
+        painter.setRenderHint(QPainter::SmoothPixmapTransform);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setRenderHint(QPainter::TextAntialiasing);
+        painter.setRenderHint(QPainter::HighQualityAntialiasing);
+      }
+#endif
       mainFrame->render(&painter);
       painter.end();
       // TODO: add quality
@@ -333,6 +373,10 @@ CaptHelp(void) {
     "  --expect-alert=<string>        Try waiting for alert(string) before capture \n"
     "  --debug-print-alerts           Prints out alert(...) strings for debugging. \n"
 #endif
+#if QT_VERSION >= 0x050000
+    "  --smooth                       Attempt to enable Qt's high-quality settings.\n"
+#endif
+    "  --insecure                     Ignore SSL/TLS certificate errors            \n"
     " -----------------------------------------------------------------------------\n"
     "  <f> is svg,ps,pdf,itext,html,rtree,png,jpeg,mng,tiff,gif,bmp,ppm,xbm,xpm    \n"
     " -----------------------------------------------------------------------------\n"
@@ -347,7 +391,7 @@ CaptHelp(void) {
     " This an experimental and easily abused and misused feature. Use with caution.\n"
     " -----------------------------------------------------------------------------\n"
 #endif
-    " http://cutycapt.sf.net - (c) 2003-2010 Bjoern Hoehrmann - bjoern@hoehrmann.de\n"
+    " http://cutycapt.sf.net - (c) 2003-2013 Bjoern Hoehrmann - bjoern@hoehrmann.de\n"
     "");
 }
 
@@ -357,11 +401,13 @@ main(int argc, char *argv[]) {
   int argHelp = 0;
   int argDelay = 0;
   int argSilent = 0;
+  int argInsecure = 0;
   int argMinWidth = 800;
   int argMinHeight = 600;
   int argMaxWait = 90000;
   int argVerbosity = 0;
-  
+  int argSmooth = 0;
+
   const char* argUrl = NULL;
   const char* argUserStyle = NULL;
   const char* argUserStylePath = NULL;
@@ -401,6 +447,16 @@ main(int argc, char *argv[]) {
     } else if (strcmp("--verbose", s) == 0) {
       argVerbosity++;
       continue;
+
+    } else if (strcmp("--insecure", s) == 0) {
+      argInsecure = 1;
+      continue;
+
+#if QT_VERSION >= 0x050000
+    } else if (strcmp("--smooth", s) == 0) {
+      argSmooth = 1;
+      continue;
+#endif
 
 #if CUTYCAPT_SCRIPT
     } else if (strcmp("--debug-print-alerts", s) == 0) {
@@ -594,7 +650,8 @@ main(int argc, char *argv[]) {
     }
   }
 
-  CutyCapt main(&page, argOut, argDelay, format, scriptProp, scriptCode);
+  CutyCapt main(&page, argOut, argDelay, format, scriptProp, scriptCode,
+                !!argInsecure, !!argSmooth);
 
   app.connect(&page,
     SIGNAL(loadFinished(bool)),
@@ -647,6 +704,11 @@ main(int argc, char *argv[]) {
     &main,
     SLOT(JavaScriptWindowObjectCleared()));
 #endif
+
+  app.connect(page.networkAccessManager(),
+    SIGNAL(sslErrors(QNetworkReply*, QList<QSslError>)),
+    &main,
+    SLOT(handleSslErrors(QNetworkReply*, QList<QSslError>)));
 
   if (!body.isNull())
     page.mainFrame()->load(req, method, body);
